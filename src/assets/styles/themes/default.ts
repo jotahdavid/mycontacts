@@ -7,5 +7,10 @@ export default {
       main: '#5061FC',
       dark: '#3346F0',
     },
+    gray: {
+      900: '#222',
+      200: '#bcbcbc',
+      100: '#E6E6E6',
+    },
   },
 };
