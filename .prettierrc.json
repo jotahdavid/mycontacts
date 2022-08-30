@@ -1,0 +1,8 @@
+{
+  "singleQuote": true,
+  "semi": true,
+  "bracketSpacing": true,
+  "endOfLine": "lf",
+  "printWidth": 100,
+  "useEditorConfig": true
+}
