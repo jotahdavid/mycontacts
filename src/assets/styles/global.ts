@@ -10,9 +10,20 @@ export default createGlobalStyle`
 
   html,
   body,
-  #root {
+  #root,
+  #modal-root {
     width: 100%;
     height: 100%;
+  }
+
+  #modal-root {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+
+    > * {
+      pointer-events: initial;
+    }
   }
 
   body {

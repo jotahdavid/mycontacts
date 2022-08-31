@@ -1,10 +1,14 @@
 import { rem } from '@assets/styles/utils';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-export const Button = styled.button`
-  width: 100%;
+interface StyledButtonProps {
+  danger?: boolean;
+}
+
+export const Button = styled.button<StyledButtonProps>`
   height: ${rem(56)};
   background-color: ${({ theme }) => theme.colors.primary.main};
+  padding: 0 ${rem(16)};
 
   border: none;
   border-radius: 4px;
@@ -30,4 +34,22 @@ export const Button = styled.button`
     background-color: #ccc;
     cursor: default;
   }
+
+  ${({ theme, danger }) =>
+    danger &&
+    css`
+      background-color: ${theme.colors.danger.main};
+
+      &:hover {
+        background-color: ${theme.colors.danger.light};
+      }
+
+      &:active {
+        background-color: ${theme.colors.danger.dark};
+      }
+    `}
 `;
+
+Button.defaultProps = {
+  danger: false,
+};
