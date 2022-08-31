@@ -11,12 +11,14 @@ export default createGlobalStyle`
   html,
   body,
   #root,
-  #modal-root {
+  #modal-root,
+  #loader-root {
     width: 100%;
     height: 100%;
   }
 
-  #modal-root {
+  #modal-root,
+  #loader-root {
     position: fixed;
     inset: 0;
     pointer-events: none;
