@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 import { Card, Header, InputSearchContainer, ListContainer } from './styles';
 
 import arrowIcon from '@assets/images/icons/arrow.svg';
@@ -13,7 +15,7 @@ export function Home() {
 
       <Header>
         <h3>3 contatos</h3>
-        <a href="/">Novo contato</a>
+        <Link to="/new">Novo contato</Link>
       </Header>
 
       <ListContainer>
