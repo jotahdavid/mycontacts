@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 import { Modal } from '@components/Modal';
 import {
-  Card, Header, InputSearchContainer, ListContainer
+  Card, Header, InputSearchContainer, ListContainer,
 } from './styles';
 
 import arrowIcon from '@assets/images/icons/arrow.svg';

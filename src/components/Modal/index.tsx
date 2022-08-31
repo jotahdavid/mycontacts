@@ -5,6 +5,7 @@ import { Container, Footer, Overlay } from './styles';
 interface ModalProps {
   danger?: boolean;
 }
+
 export function Modal({ danger }: ModalProps) {
   return ReactDOM.createPortal(
     <Overlay>
@@ -22,7 +23,7 @@ export function Modal({ danger }: ModalProps) {
         </Footer>
       </Container>
     </Overlay>,
-    document.getElementById("modal-root")!
+    document.getElementById('modal-root')!,
   );
 }
 
