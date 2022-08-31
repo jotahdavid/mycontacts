@@ -12,7 +12,7 @@ export function PageHeader({ title = 'Title' }: PageHeaderProps) {
   return (
     <Container>
       <Link to="/">
-        <img src={arrowIcon} />
+        <img src={arrowIcon} alt="Ícone de uma seta" />
         <span>Voltar</span>
       </Link>
       <h1>{title}</h1>

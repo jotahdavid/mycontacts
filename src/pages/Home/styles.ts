@@ -29,7 +29,7 @@ export const Header = styled.header`
     justify-content: space-between;
 
     h3 {
-      color: ${({ theme }) => theme.colors.gray[900]};
+      color: ${theme.colors.gray[900]};
       font-size: ${rem(24)};
     }
 

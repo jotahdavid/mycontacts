@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 
-import { Card, Header, InputSearchContainer, ListContainer } from './styles';
+import {
+  Card, Header, InputSearchContainer, ListContainer,
+} from './styles';
 
 import arrowIcon from '@assets/images/icons/arrow.svg';
 import editIcon from '@assets/images/icons/edit.svg';
