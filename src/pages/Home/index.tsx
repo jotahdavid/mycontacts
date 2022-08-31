@@ -41,9 +41,9 @@ export function Home() {
             </div>
 
             <div className="actions">
-              <a href="/">
+              <Link to="/edit/id">
                 <img src={editIcon} alt="Ícone de editar" />
-              </a>
+              </Link>
               <button type="button">
                 <img src={trashIcon} alt="Ícone de uma lixeira" />
               </button>
@@ -61,9 +61,9 @@ export function Home() {
             </div>
 
             <div className="actions">
-              <a href="/">
+              <Link to="/edit/id">
                 <img src={editIcon} alt="Ícone de editar" />
-              </a>
+              </Link>
               <button type="button">
                 <img src={trashIcon} alt="Ícone de uma lixeira" />
               </button>
@@ -81,9 +81,9 @@ export function Home() {
             </div>
 
             <div className="actions">
-              <a href="/">
+              <Link to="/edit/id">
                 <img src={editIcon} alt="Ícone de editar" />
-              </a>
+              </Link>
               <button type="button">
                 <img src={trashIcon} alt="Ícone de uma lixeira" />
               </button>
