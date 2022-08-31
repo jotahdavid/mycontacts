@@ -106,7 +106,12 @@ export const Card = styled.div`
 
   .actions {
     display: flex;
-    align-items: center;
+
+    a,
+    button {
+      display: flex;
+      align-items: center;
+    }
 
     button {
       background-color: transparent;
