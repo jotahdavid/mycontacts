@@ -4,5 +4,6 @@
   "bracketSpacing": true,
   "endOfLine": "lf",
   "printWidth": 100,
-  "useEditorConfig": true
+  "useEditorConfig": true,
+  "trailingComma": "all"
 }

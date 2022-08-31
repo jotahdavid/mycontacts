@@ -1,7 +1,11 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { rem } from '@assets/styles/utils';
 
-export const Input = styled.input`
+interface StyledInputProps {
+  error?: boolean;
+}
+
+export const Input = styled.input<StyledInputProps>`
   width: 100%;
   height: ${rem(56)};
 
@@ -25,4 +29,15 @@ export const Input = styled.input`
   &:focus {
     border-color: ${({ theme }) => theme.colors.primary.main};
   }
+
+  ${({ theme, error }) =>
+    error &&
+    css`
+      color: ${theme.colors.danger.main};
+      border-color: ${theme.colors.danger.main} !important;
+    `}
 `;
+
+Input.defaultProps = {
+  error: false,
+};
