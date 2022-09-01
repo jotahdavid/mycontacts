@@ -22,6 +22,10 @@
     "import/prefer-default-export": "off",
     "import/order": "off",
     "implicit-arrow-linebreak": "off",
-    "operator-linebreak": "off"
+    "operator-linebreak": "off",
+    "react/jsx-no-bind": ["error", {
+      "allowArrowFunctions": true,
+      "allowFunctions": true
+    }]
   }
 }
