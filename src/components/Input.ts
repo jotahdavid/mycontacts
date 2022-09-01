@@ -12,6 +12,7 @@ export const Input = styled.input<StyledInputProps>`
   background-color: #fff;
   padding: 1rem;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+  appearance: none;
 
   border: none;
   border: 2px solid #fff;
