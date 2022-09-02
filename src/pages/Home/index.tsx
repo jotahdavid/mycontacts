@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { Modal } from '@components/Modal';
@@ -9,17 +10,40 @@ import arrowIcon from '@assets/images/icons/arrow.svg';
 import editIcon from '@assets/images/icons/edit.svg';
 import trashIcon from '@assets/images/icons/trash.svg';
 
+interface Contact {
+  id: string;
+  name: string;
+  email?: string;
+  phone?: string;
+  category_id?: string;
+  category_name?: string;
+}
+
 export function Home() {
+  const [contacts, setContacts] = useState<Contact[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      const response = await fetch('http://localhost:3001/contacts');
+      const contactsJSON = await response.json();
+      setContacts(contactsJSON);
+    })();
+  }, []);
+
   return (
     <>
-      <Modal danger />
+      {false && <Modal danger />}
 
       <InputSearchContainer>
         <input type="text" placeholder="Pesquisar contato" />
       </InputSearchContainer>
 
       <Header>
-        <h3>3 contatos</h3>
+        <h3>
+          {contacts.length}
+          &nbsp;
+          {contacts.length === 1 ? 'contato' : 'contatos'}
+        </h3>
         <Link to="/new">Novo contato</Link>
       </Header>
 
@@ -31,67 +55,31 @@ export function Home() {
           </button>
         </header>
 
-        <ul>
-          <Card as="li">
-            <div className="info">
-              <div className="contact-name">
-                <strong>Mateus Silva</strong>
-                <small>Instagram</small>
+        <ul style={{ paddingBottom: '2rem' }}>
+          {Array.isArray(contacts) && contacts.map((contact) => (
+            <Card as="li" key={contact.id}>
+              <div className="info">
+                <div className="contact-name">
+                  <strong>{contact.name}</strong>
+                  {contact.category_name && (
+                    <small>{contact.category_name}</small>
+                  )}
+                </div>
+
+                <span>{contact.email}</span>
+                <span>{contact.phone}</span>
               </div>
 
-              <span>mateus@devacademy.com.br</span>
-              <span>(41) 99999-9999</span>
-            </div>
-
-            <div className="actions">
-              <Link to="/edit/id">
-                <img src={editIcon} alt="Ícone de editar" />
-              </Link>
-              <button type="button">
-                <img src={trashIcon} alt="Ícone de uma lixeira" />
-              </button>
-            </div>
-          </Card>
-          <Card as="li">
-            <div className="info">
-              <div className="contact-name">
-                <strong>Mateus Silva</strong>
-                <small>Instagram</small>
+              <div className="actions">
+                <Link to={`/edit/${contact.id}`}>
+                  <img src={editIcon} alt="Ícone de editar" />
+                </Link>
+                <button type="button">
+                  <img src={trashIcon} alt="Ícone de uma lixeira" />
+                </button>
               </div>
-
-              <span>mateus@devacademy.com.br</span>
-              <span>(41) 99999-9999</span>
-            </div>
-
-            <div className="actions">
-              <Link to="/edit/id">
-                <img src={editIcon} alt="Ícone de editar" />
-              </Link>
-              <button type="button">
-                <img src={trashIcon} alt="Ícone de uma lixeira" />
-              </button>
-            </div>
-          </Card>
-          <Card as="li">
-            <div className="info">
-              <div className="contact-name">
-                <strong>Mateus Silva</strong>
-                <small>Instagram</small>
-              </div>
-
-              <span>mateus@devacademy.com.br</span>
-              <span>(41) 99999-9999</span>
-            </div>
-
-            <div className="actions">
-              <Link to="/edit/id">
-                <img src={editIcon} alt="Ícone de editar" />
-              </Link>
-              <button type="button">
-                <img src={trashIcon} alt="Ícone de uma lixeira" />
-              </button>
-            </div>
-          </Card>
+            </Card>
+          ))}
         </ul>
       </ListContainer>
     </>
