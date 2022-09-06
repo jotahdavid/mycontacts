@@ -26,6 +26,7 @@
     "react/jsx-no-bind": ["error", {
       "allowArrowFunctions": true,
       "allowFunctions": true
-    }]
+    }],
+    "no-console": ["warn", { "allow": ["error"] }]
   }
 }

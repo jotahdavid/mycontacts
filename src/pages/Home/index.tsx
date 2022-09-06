@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { Modal } from '@components/Modal';
@@ -24,6 +24,11 @@ type OrderBy = 'ASC' | 'DESC';
 export function Home() {
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [orderBy, setOrderBy] = useState<OrderBy>('ASC');
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const filteredContacts = contacts.filter((contact) => (
+    contact.name.toLowerCase().includes(searchTerm.toLowerCase())
+  ));
 
   useEffect(() => {
     (async () => {
@@ -32,6 +37,11 @@ export function Home() {
       setContacts(contactsJSON);
     })();
   }, [orderBy]);
+
+  function handleChangeSearchTerm(event: ChangeEvent<HTMLInputElement>) {
+    const newSearchTerm = event.target.value.trim();
+    setSearchTerm(newSearchTerm);
+  }
 
   function handleToggleOrderBy() {
     setOrderBy((prevState) => (
@@ -44,31 +54,38 @@ export function Home() {
       {false && <Modal danger />}
 
       <InputSearchContainer>
-        <input type="text" placeholder="Pesquisar contato" />
+        <input
+          type="text"
+          placeholder="Pesquisar contato"
+          value={searchTerm}
+          onChange={handleChangeSearchTerm}
+        />
       </InputSearchContainer>
 
       <Header>
         <h3>
-          {contacts.length}
+          {filteredContacts.length}
           &nbsp;
-          {contacts.length === 1 ? 'contato' : 'contatos'}
+          {filteredContacts.length === 1 ? 'contato' : 'contatos'}
         </h3>
         <Link to="/new">Novo contato</Link>
       </Header>
 
       <ListContainer orderBy={orderBy}>
         <header>
-          <button
-            type="button"
-            onClick={handleToggleOrderBy}
-          >
-            <span>Nome</span>
-            <img src={arrowIcon} alt="Seta azul" />
-          </button>
+          {filteredContacts.length > 0 && (
+            <button
+              type="button"
+              onClick={handleToggleOrderBy}
+            >
+              <span>Nome</span>
+              <img src={arrowIcon} alt="Seta azul" />
+            </button>
+          )}
         </header>
 
         <ul style={{ paddingBottom: '2rem' }}>
-          {Array.isArray(contacts) && contacts.map((contact) => (
+          {filteredContacts.map((contact) => (
             <Card as="li" key={contact.id}>
               <div className="info">
                 <div className="contact-name">
