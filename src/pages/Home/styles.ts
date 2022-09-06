@@ -53,7 +53,11 @@ export const Header = styled.header`
   `}
 `;
 
-export const ListContainer = styled.div`
+interface StyledListContainerProps {
+  orderBy: 'ASC' | 'DESC'
+}
+
+export const ListContainer = styled.div<StyledListContainerProps>`
   margin-top: ${rem(24)};
 
   header {
@@ -65,12 +69,18 @@ export const ListContainer = styled.div`
 
       display: flex;
       align-items: center;
+      padding: 0.5rem;
 
       span {
         margin-right: ${rem(8)};
         font-weight: bold;
         font-size: ${rem(16)};
         color: ${({ theme }) => theme.colors.primary.main};
+      }
+
+      img {
+        transform: ${({ orderBy }) => (orderBy === 'DESC' ? 'rotate(180deg)' : 'rotate(0)')};
+        transition: transform 200ms ease-in;
       }
     }
   }
@@ -79,6 +89,10 @@ export const ListContainer = styled.div`
     list-style: none;
   }
 `;
+
+ListContainer.defaultProps = {
+  orderBy: 'ASC',
+};
 
 export const Card = styled.div`
   padding: 1rem;

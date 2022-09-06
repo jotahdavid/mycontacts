@@ -19,16 +19,25 @@ interface Contact {
   category_name?: string;
 }
 
+type OrderBy = 'ASC' | 'DESC';
+
 export function Home() {
   const [contacts, setContacts] = useState<Contact[]>([]);
+  const [orderBy, setOrderBy] = useState<OrderBy>('ASC');
 
   useEffect(() => {
     (async () => {
-      const response = await fetch('http://localhost:3001/contacts');
+      const response = await fetch(`http://localhost:3001/contacts?orderBy=${orderBy}`);
       const contactsJSON = await response.json();
       setContacts(contactsJSON);
     })();
-  }, []);
+  }, [orderBy]);
+
+  function handleToggleOrderBy() {
+    setOrderBy((prevState) => (
+      prevState === 'ASC' ? 'DESC' : 'ASC'
+    ));
+  }
 
   return (
     <>
@@ -47,11 +56,14 @@ export function Home() {
         <Link to="/new">Novo contato</Link>
       </Header>
 
-      <ListContainer>
+      <ListContainer orderBy={orderBy}>
         <header>
-          <button type="button">
+          <button
+            type="button"
+            onClick={handleToggleOrderBy}
+          >
             <span>Nome</span>
-            <img src={arrowIcon} alt="Seta apontando para cima" />
+            <img src={arrowIcon} alt="Seta azul" />
           </button>
         </header>
 
