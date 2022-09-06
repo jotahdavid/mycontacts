@@ -1,4 +1,7 @@
-export interface Contact {
+import HttpClient from '@services/utils/HttpClient';
+import delay from '@utils/delay';
+
+export interface ContactResponse {
   id: string;
   name: string;
   email?: string;
@@ -10,9 +13,12 @@ export interface Contact {
 export type OrderBy = 'ASC' | 'DESC';
 
 class ContactsService {
-  async listContacts(orderBy: OrderBy = 'ASC'): Promise<Contact[]> {
-    const response = await fetch(`http://localhost:3001/contacts?orderBy=${orderBy}`);
-    return response.json();
+  private http = new HttpClient(import.meta.env.VITE_API_URL);
+
+  async listContacts(orderBy: OrderBy = 'ASC') {
+    const contacts = await this.http.get<ContactResponse[]>(`/contacts?orderBy=${orderBy}`);
+    await delay(500);
+    return contacts;
   }
 }
 

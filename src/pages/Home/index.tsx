@@ -4,7 +4,7 @@ import {
 import { Link } from 'react-router-dom';
 
 import ContactsService from '@services/ContactsService';
-import type { Contact, OrderBy } from '@services/ContactsService';
+import type { ContactResponse, OrderBy } from '@services/ContactsService';
 
 import { Modal } from '@components/Modal';
 import { Loader } from '@components/Loader';
@@ -15,6 +15,8 @@ import {
 import arrowIcon from '@assets/images/icons/arrow.svg';
 import editIcon from '@assets/images/icons/edit.svg';
 import trashIcon from '@assets/images/icons/trash.svg';
+
+type Contact = ContactResponse;
 
 export function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -32,8 +34,8 @@ export function Home() {
     (async () => {
       try {
         setIsLoading(true);
-        const contactsData = await ContactsService.listContacts(orderBy);
-        setContacts(contactsData);
+        const response = await ContactsService.listContacts(orderBy);
+        setContacts(response.data ?? []);
       } catch (err) {
         console.error(err);
       } finally {
