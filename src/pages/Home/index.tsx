@@ -4,6 +4,7 @@ import {
 import { Link } from 'react-router-dom';
 
 import { Modal } from '@components/Modal';
+import { Loader } from '@components/Loader';
 import {
   Card, Header, InputSearchContainer, ListContainer,
 } from './styles';
@@ -24,6 +25,7 @@ interface Contact {
 type OrderBy = 'ASC' | 'DESC';
 
 export function Home() {
+  const [isLoading, setIsLoading] = useState(true);
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [orderBy, setOrderBy] = useState<OrderBy>('ASC');
   const [searchTerm, setSearchTerm] = useState('');
@@ -35,10 +37,18 @@ export function Home() {
   ), [contacts, searchTerm]);
 
   useEffect(() => {
+    setIsLoading(true);
+
     (async () => {
-      const response = await fetch(`http://localhost:3001/contacts?orderBy=${orderBy}`);
-      const contactsJSON = await response.json();
-      setContacts(contactsJSON);
+      try {
+        const response = await fetch(`http://localhost:3001/contacts?orderBy=${orderBy}`);
+        const contactsJSON = await response.json();
+        setContacts(contactsJSON);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setIsLoading(false);
+      }
     })();
   }, [orderBy]);
 
@@ -48,6 +58,7 @@ export function Home() {
   }
 
   function handleToggleOrderBy() {
+    if (isLoading) return;
     setOrderBy((prevState) => (
       prevState === 'ASC' ? 'DESC' : 'ASC'
     ));
@@ -56,6 +67,7 @@ export function Home() {
   return (
     <>
       {false && <Modal danger />}
+      <Loader loading={isLoading} />
 
       <InputSearchContainer>
         <input
