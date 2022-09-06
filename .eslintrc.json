@@ -25,11 +25,12 @@
     "import/order": "off",
     "implicit-arrow-linebreak": "off",
     "operator-linebreak": "off",
+    "no-console": ["warn", { "allow": ["error"] }],
+    "class-methods-use-this": "off",
     "react/jsx-no-bind": ["error", {
       "allowArrowFunctions": true,
       "allowFunctions": true
     }],
-    "no-console": ["warn", { "allow": ["error"] }],
     "react-hooks/rules-of-hooks": "warn",
     "react-hooks/exhaustive-deps": "warn"
   }

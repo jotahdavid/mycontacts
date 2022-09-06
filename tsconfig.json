@@ -22,7 +22,8 @@
       "@assets/*": ["assets/*"],
       "@styles/*": ["assets/styles/*"],
       "@utils/*": ["utils/*"],
-      "@hooks/*": ["hooks/*"]
+      "@hooks/*": ["hooks/*"],
+      "@services/*": ["services/*"]
     }
   },
   "include": ["src"],

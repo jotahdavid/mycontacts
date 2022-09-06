@@ -3,6 +3,9 @@ import {
 } from 'react';
 import { Link } from 'react-router-dom';
 
+import ContactsService from '@services/ContactsService';
+import type { Contact, OrderBy } from '@services/ContactsService';
+
 import { Modal } from '@components/Modal';
 import { Loader } from '@components/Loader';
 import {
@@ -12,17 +15,6 @@ import {
 import arrowIcon from '@assets/images/icons/arrow.svg';
 import editIcon from '@assets/images/icons/edit.svg';
 import trashIcon from '@assets/images/icons/trash.svg';
-
-interface Contact {
-  id: string;
-  name: string;
-  email?: string;
-  phone?: string;
-  category_id?: string;
-  category_name?: string;
-}
-
-type OrderBy = 'ASC' | 'DESC';
 
 export function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -37,13 +29,11 @@ export function Home() {
   ), [contacts, searchTerm]);
 
   useEffect(() => {
-    setIsLoading(true);
-
     (async () => {
       try {
-        const response = await fetch(`http://localhost:3001/contacts?orderBy=${orderBy}`);
-        const contactsJSON = await response.json();
-        setContacts(contactsJSON);
+        setIsLoading(true);
+        const contactsData = await ContactsService.listContacts(orderBy);
+        setContacts(contactsData);
       } catch (err) {
         console.error(err);
       } finally {
