@@ -1,4 +1,6 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import {
+  ChangeEvent, useEffect, useState, useMemo,
+} from 'react';
 import { Link } from 'react-router-dom';
 
 import { Modal } from '@components/Modal';
@@ -26,9 +28,11 @@ export function Home() {
   const [orderBy, setOrderBy] = useState<OrderBy>('ASC');
   const [searchTerm, setSearchTerm] = useState('');
 
-  const filteredContacts = contacts.filter((contact) => (
-    contact.name.toLowerCase().includes(searchTerm.toLowerCase())
-  ));
+  const filteredContacts = useMemo(() => (
+    contacts.filter((contact) => (
+      contact.name.toLowerCase().includes(searchTerm.toLowerCase())
+    ))
+  ), [contacts, searchTerm]);
 
   useEffect(() => {
     (async () => {
