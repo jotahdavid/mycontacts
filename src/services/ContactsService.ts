@@ -30,7 +30,7 @@ class ContactsService {
   private http = new HttpClient(import.meta.env.VITE_API_URL);
 
   async listContacts(orderBy: OrderBy = 'ASC'): Promise<ContactResponse[]> {
-    const response = await this.http.get<ContactResponse[]>(`/contacts?orderBy=${orderBy}`);
+    const response = await this.http.get<ContactResponse[]>(`/contactss?orderBy=${orderBy}`);
 
     await delay(500);
     responseHasError(response);

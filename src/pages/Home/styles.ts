@@ -22,11 +22,17 @@ export const InputSearchContainer = styled.div`
   }
 `;
 
-export const Header = styled.header`
-  ${({ theme }) => css`
+interface StyledHeaderProps {
+  hasError: boolean;
+}
+
+export const Header = styled.header<StyledHeaderProps>`
+  ${({ theme, hasError }) => css`
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: ${hasError ? 'flex-end' : 'space-between'};
+    border-bottom: 2px solid ${theme.colors.gray[100]};
+    padding-bottom: ${rem(16)};
 
     h3 {
       color: ${theme.colors.gray[900]};
@@ -148,6 +154,26 @@ export const Card = styled.div`
       background-color: transparent;
       border: none;
       margin-left: ${rem(8)};
+    }
+  }
+`;
+
+export const ErrorContainer = styled.div`
+  margin-top: ${rem(16)};
+  display: flex;
+  align-items: center;
+  gap: ${rem(24)};
+
+  .details {
+    strong {
+      font-size: ${rem(22)};
+      color: ${({ theme }) => theme.colors.danger.main};
+      display: block;
+      margin-bottom: ${rem(12)};
+    }
+
+    button {
+      height: ${rem(44)};
     }
   }
 `;
