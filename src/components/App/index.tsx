@@ -7,7 +7,7 @@ import GlobalStyles from '@styles/global';
 import defaultTheme from '@styles/themes/default';
 import { Container } from './styles';
 
-import MyRoutes from '../../Routes';
+import AppRoutes from '../../Routes';
 
 export function App() {
   return (
@@ -17,7 +17,7 @@ export function App() {
 
         <Container>
           <Header />
-          <MyRoutes />
+          <AppRoutes />
         </Container>
       </ThemeProvider>
     </BrowserRouter>
