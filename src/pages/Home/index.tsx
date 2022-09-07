@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 import ContactsService from '@services/ContactsService';
 import type { ContactResponse, OrderBy } from '@services/ContactsService';
+import APIError from '@errors/APIError';
 
 import { Modal } from '@components/Modal';
 import { Loader } from '@components/Loader';
@@ -37,7 +38,11 @@ export function Home() {
         const contactsList = await ContactsService.listContacts(orderBy);
         setContacts(contactsList);
       } catch (err) {
-        console.error(err);
+        if (err instanceof APIError) {
+          console.error(err);
+        } else {
+          console.error(err);
+        }
       } finally {
         setIsLoading(false);
       }

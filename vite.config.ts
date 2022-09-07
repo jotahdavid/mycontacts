@@ -13,6 +13,7 @@ export default defineConfig({
       '@utils': '/src/utils',
       '@hooks': '/src/hooks',
       '@services': '/src/services',
+      '@errors': '/src/errors',
     },
   },
 });

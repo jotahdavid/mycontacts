@@ -1,5 +1,6 @@
 import HttpClient, { HttpClientResponse } from '@services/utils/HttpClient';
 import delay from '@utils/delay';
+import APIError from '@errors/APIError';
 
 export interface ContactResponse {
   id: string;
@@ -14,7 +15,7 @@ export type OrderBy = 'ASC' | 'DESC';
 
 function responseHasError(response: HttpClientResponse): asserts response {
   if (response.data?.error && !response.status.ok) {
-    throw new Error(response.data.error);
+    throw new APIError(response);
   }
 }
 
@@ -39,7 +40,7 @@ class ContactsService {
     }
 
     if (!response.status.ok) {
-      throw new Error(`${response.status.code} - ${response.status.message}`);
+      throw new APIError(response);
     }
 
     throw new TypeError('Response data is not Contact type');
