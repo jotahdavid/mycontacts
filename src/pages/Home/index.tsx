@@ -35,7 +35,7 @@ export function Home() {
       try {
         setIsLoading(true);
         const response = await ContactsService.listContacts(orderBy);
-        setContacts(response.data ?? []);
+        setContacts(response.data);
       } catch (err) {
         console.error(err);
       } finally {
