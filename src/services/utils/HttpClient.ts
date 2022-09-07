@@ -1,7 +1,11 @@
-export interface HttpClientResponse<DataType = any> {
-  status: number,
-  headers: unknown,
-  data: DataType | null;
+export interface HttpClientResponse<D = any> {
+  status: {
+    ok: boolean;
+    code: number;
+    message: string;
+  };
+  headers: unknown;
+  data: D | null;
 }
 
 class HttpClient {
@@ -18,7 +22,11 @@ class HttpClient {
       : null;
 
     return {
-      status: response.status,
+      status: {
+        ok: response.ok,
+        code: response.status,
+        message: response.statusText,
+      },
       headers: responseHeaders,
       data,
     };
