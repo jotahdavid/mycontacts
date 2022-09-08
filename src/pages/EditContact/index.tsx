@@ -5,7 +5,7 @@ import { PageHeader } from '@components/PageHeader';
 export function EditContact() {
   return (
     <section>
-      <Loader />
+      <Loader loading />
 
       <PageHeader
         title="Editar {Nome do Contato}"
