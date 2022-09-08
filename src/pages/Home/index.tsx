@@ -170,7 +170,7 @@ export function Home() {
                     <div className="contact-name">
                       <strong>{contact.name}</strong>
                       {contact.category_name && (
-                      <small>{contact.category_name}</small>
+                        <small>{contact.category_name}</small>
                       )}
                     </div>
 

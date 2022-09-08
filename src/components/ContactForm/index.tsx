@@ -4,6 +4,8 @@ import {
 
 import CategoriesService from '@services/CategoriesService';
 import type { CategoryResponse } from '@services/CategoriesService';
+import type { Contact } from '@services/ContactsService';
+
 import isEmailValid from '@utils/isEmailValid';
 import formatPhoneNumber from '@utils/formatPhoneNumber';
 import useErrors from '@hooks/useErrors';
@@ -17,17 +19,16 @@ import { ButtonContainer, Form } from './styles';
 
 interface ContactFormProps {
   buttonLabel: string;
+  onSubmit: (contact: Contact) => void;
 }
 
-type Category = CategoryResponse;
-
-export function ContactForm({ buttonLabel }: ContactFormProps) {
+export function ContactForm({ buttonLabel, onSubmit }: ContactFormProps) {
   const [isLoadingCategories, setIsLoadingCategories] = useState(true);
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<CategoryResponse[]>([]);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [category, setCategory] = useState('');
+  const [categoryId, setCategoryId] = useState('');
 
   const {
     errors, setError, removeError, getErrorMessageByFieldName,
@@ -50,12 +51,18 @@ export function ContactForm({ buttonLabel }: ContactFormProps) {
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    onSubmit({
+      name: name.trim(),
+      email,
+      phone,
+      categoryId,
+    });
   }
 
   function handleNameChange({ target }: ChangeEvent<HTMLInputElement>) {
     setName(target.value);
 
-    if (!target.value) {
+    if (!target.value.trim()) {
       setError({ field: 'name', message: 'Nome é obrigatório!' });
       return;
     }
@@ -121,17 +128,17 @@ export function ContactForm({ buttonLabel }: ContactFormProps) {
 
       <FormGroup loading={isLoadingCategories}>
         <Select
-          value={category}
-          onChange={({ target }) => setCategory(target.value)}
+          value={categoryId}
+          onChange={({ target }) => setCategoryId(target.value)}
           disabled={isLoadingCategories}
         >
           <option value="">Sem categoria</option>
-          {categories.map((categoryItem) => (
+          {categories.map((category) => (
             <option
-              key={categoryItem.id}
-              value={categoryItem.name}
+              key={category.id}
+              value={category.id}
             >
-              {categoryItem.name}
+              {category.name}
             </option>
           ))}
         </Select>
@@ -139,7 +146,7 @@ export function ContactForm({ buttonLabel }: ContactFormProps) {
 
       <ButtonContainer>
         <Button
-          type="button"
+          type="submit"
           disabled={!isFormValid}
         >
           {buttonLabel}
