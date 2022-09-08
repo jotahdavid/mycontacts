@@ -11,13 +11,19 @@ import { Modal } from '@components/Modal';
 import { Loader } from '@components/Loader';
 import { Button } from '@components/Button';
 import {
-  Card, ErrorContainer, Header, InputSearchContainer, ListContainer,
+  Card,
+  ErrorContainer,
+  Header,
+  InputSearchContainer,
+  ListContainer,
+  EmptyListContainer,
 } from './styles';
 
 import arrowIcon from '@assets/images/icons/arrow.svg';
 import editIcon from '@assets/images/icons/edit.svg';
 import trashIcon from '@assets/images/icons/trash.svg';
-import sadIcon from '@assets/images/sad.svg';
+import sadFaceImage from '@assets/images/sad.svg';
+import emptyBoxImage from '@assets/images/empty-box.svg';
 
 type Contact = ContactResponse;
 
@@ -70,17 +76,26 @@ export function Home() {
       {false && <Modal danger />}
       <Loader loading={isLoading} />
 
-      <InputSearchContainer>
-        <input
-          type="text"
-          placeholder="Pesquisar contato"
-          value={searchTerm}
-          onChange={handleChangeSearchTerm}
-        />
-      </InputSearchContainer>
+      {contacts.length > 0 && (
+        <InputSearchContainer>
+          <input
+            type="text"
+            placeholder="Pesquisar contato"
+            value={searchTerm}
+            onChange={handleChangeSearchTerm}
+          />
+        </InputSearchContainer>
+      )}
 
-      <Header hasError={hasError}>
-        {!hasError && (
+      <Header
+        justifyContent={
+          // eslint-disable-next-line no-nested-ternary
+          hasError ? 'flex-end' : (
+            contacts.length > 0 ? 'space-between' : 'center'
+          )
+        }
+      >
+        {(!hasError && contacts.length > 0) && (
           <h3>
             {filteredContacts.length}
             &nbsp;
@@ -92,7 +107,7 @@ export function Home() {
 
       {hasError && (
         <ErrorContainer>
-          <img src={sadIcon} alt="Carinha triste" />
+          <img src={sadFaceImage} alt="Carinha triste" />
           <div className="details">
             <strong>Ocorreu um error ao obter os seus contatos!</strong>
             <Button onClick={loadContacts}>Tentar novamente</Button>
@@ -100,49 +115,65 @@ export function Home() {
         </ErrorContainer>
       )}
 
-      <ListContainer orderBy={orderBy}>
-        <header>
-          {!hasError && (
-            filteredContacts.length > 0 && (
-              <button
-                type="button"
-                onClick={handleToggleOrderBy}
-              >
-                <span>Nome</span>
-                <img src={arrowIcon} alt="Seta azul" />
-              </button>
-            )
+      {!hasError && (
+        <>
+          {(contacts.length < 1 && !isLoading) && (
+            <EmptyListContainer>
+              <img src={emptyBoxImage} alt="Caixa azul" />
+              <p>
+                Você ainda não tem nenhum contato cadastrado!
+                <br />
+                Clique no botão
+                &nbsp;
+                <strong>&ldquo;Novo contato&rdquo;</strong>
+                &nbsp;
+                à cima para cadastrar o seu primeiro!
+              </p>
+            </EmptyListContainer>
           )}
-        </header>
 
-        <ul style={{ paddingBottom: '2rem' }}>
-          {!hasError && (
-            filteredContacts.map((contact) => (
-              <Card as="li" key={contact.id}>
-                <div className="info">
-                  <div className="contact-name">
-                    <strong>{contact.name}</strong>
-                    {contact.category_name && (
-                    <small>{contact.category_name}</small>
-                    )}
+          <ListContainer orderBy={orderBy}>
+            <header>
+              {filteredContacts.length > 0 && (
+                <button
+                  type="button"
+                  onClick={handleToggleOrderBy}
+                >
+                  <span>Nome</span>
+                  <img src={arrowIcon} alt="Seta azul" />
+                </button>
+              )}
+            </header>
+
+            <ul style={{ paddingBottom: '2rem' }}>
+              {filteredContacts.map((contact) => (
+                <Card as="li" key={contact.id}>
+                  <div className="info">
+                    <div className="contact-name">
+                      <strong>{contact.name}</strong>
+                      {contact.category_name && (
+                      <small>{contact.category_name}</small>
+                      )}
+                    </div>
+
+                    <span>{contact.email}</span>
+                    <span>{contact.phone}</span>
                   </div>
 
-                  <span>{contact.email}</span>
-                  <span>{contact.phone}</span>
-                </div>
-
-                <div className="actions">
-                  <Link to={`/edit/${contact.id}`}>
-                    <img src={editIcon} alt="Ícone de editar" />
-                  </Link>
-                  <button type="button">
-                    <img src={trashIcon} alt="Ícone de uma lixeira" />
-                  </button>
-                </div>
-              </Card>
-            )))}
-        </ul>
-      </ListContainer>
+                  <div className="actions">
+                    <Link to={`/edit/${contact.id}`}>
+                      <img src={editIcon} alt="Ícone de editar" />
+                    </Link>
+                    <button type="button">
+                      <img src={trashIcon} alt="Ícone de uma lixeira" />
+                    </button>
+                  </div>
+                </Card>
+              ))}
+            </ul>
+          </ListContainer>
+        </>
+      )}
     </>
   );
 }

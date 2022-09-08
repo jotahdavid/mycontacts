@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled, { css, CSSProperties } from 'styled-components';
 import { rem } from '@assets/styles/utils';
 
 export const InputSearchContainer = styled.div`
@@ -23,14 +23,14 @@ export const InputSearchContainer = styled.div`
 `;
 
 interface StyledHeaderProps {
-  hasError: boolean;
+  justifyContent?: CSSProperties['justifyContent'];
 }
 
 export const Header = styled.header<StyledHeaderProps>`
-  ${({ theme, hasError }) => css`
+  ${({ theme, justifyContent }) => css`
     display: flex;
     align-items: center;
-    justify-content: ${hasError ? 'flex-end' : 'space-between'};
+    justify-content: ${justifyContent};
     border-bottom: 2px solid ${theme.colors.gray[100]};
     padding-bottom: ${rem(16)};
 
@@ -58,6 +58,10 @@ export const Header = styled.header<StyledHeaderProps>`
     }
   `}
 `;
+
+Header.defaultProps = {
+  justifyContent: 'initial',
+};
 
 interface StyledListContainerProps {
   orderBy: 'ASC' | 'DESC'
@@ -175,5 +179,28 @@ export const ErrorContainer = styled.div`
     button {
       height: ${rem(44)};
     }
+  }
+`;
+
+export const EmptyListContainer = styled.div`
+  margin-top: ${rem(16)};
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  p {
+    margin-top: ${rem(16)};
+    max-width: ${rem(402)};
+
+    line-height: ${rem(20)};
+    font-size: ${rem(16)};
+    color: ${({ theme }) => theme.colors.gray[200]};
+    text-align: center;
+  }
+
+  strong {
+    line-height: inherit;
+    font-size: inherit;
+    color: ${({ theme }) => theme.colors.primary.main}
   }
 `;
