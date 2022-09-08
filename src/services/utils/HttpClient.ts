@@ -1,24 +1,47 @@
-export interface HttpClientResponse<D = any> {
+export interface HttpClientResponse<T = any> {
   status: {
     ok: boolean;
     code: number;
     message: string;
   };
-  headers: unknown;
-  data: D | null;
+  headers: Record<string, string>;
+  data: T | null;
 }
+
+type RequestOptions = Omit<RequestInit, 'body'> & {
+  body?: unknown
+};
 
 class HttpClient {
   constructor(
     private baseURL: string,
   ) {}
 
-  async get<T>(path: string): Promise<HttpClientResponse<T>> {
-    const response = await fetch(this.baseURL + path);
+  private async makeRequest<DataType = any>(
+    path: string,
+    options: RequestOptions,
+  ): Promise<HttpClientResponse<DataType>> {
+    const headers = new Headers();
+
+    if (options.body) {
+      headers.append('Content-Type', 'application/json');
+    }
+
+    if (options.headers) {
+      Object.entries(options.headers).forEach(([name, value]) => {
+        headers.append(name, value);
+      });
+    }
+
+    const response = await fetch(this.baseURL + path, {
+      ...options,
+      body: options.body ? JSON.stringify(options.body) : null,
+      headers,
+    });
+
     const responseHeaders = Object.fromEntries(response.headers.entries());
-    const [contentType] = responseHeaders['content-type'].split(';');
-    const data = contentType.toLowerCase().includes('json')
-      ? await response.json() as T
+    const responseData = responseHeaders['content-type'].includes('json')
+      ? await response.json() as DataType
       : null;
 
     return {
@@ -28,34 +51,23 @@ class HttpClient {
         message: response.statusText,
       },
       headers: responseHeaders,
-      data,
+      data: responseData,
     };
   }
 
-  async post(path: string, body: unknown): Promise<HttpClientResponse> {
-    const headers = new Headers({
-      'Content-Type': 'application/json',
+  get<DataType>(path: string, options?: Omit<RequestOptions, 'body'>) {
+    return this.makeRequest<DataType>(path, {
+      method: 'GET',
+      headers: options?.headers,
     });
-    const response = await fetch(this.baseURL + path, {
-      method: 'POST',
-      body: JSON.stringify(body),
-      headers,
-    });
-    const responseHeaders = Object.fromEntries(response.headers.entries());
-    const [contentType] = responseHeaders['content-type'].split(';');
-    const data = contentType.toLowerCase().includes('json')
-      ? await response.json()
-      : null;
+  }
 
-    return {
-      status: {
-        ok: response.ok,
-        code: response.status,
-        message: response.statusText,
-      },
-      headers: responseHeaders,
-      data,
-    };
+  post(path: string, options: RequestOptions) {
+    return this.makeRequest(path, {
+      method: 'POST',
+      body: options?.body,
+      headers: options?.headers,
+    });
   }
 }
 
