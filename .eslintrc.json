@@ -26,6 +26,7 @@
     "implicit-arrow-linebreak": "off",
     "operator-linebreak": "off",
     "no-console": ["warn", { "allow": ["error"] }],
+    "no-empty": ["error", { "allowEmptyCatch": true }],
     "class-methods-use-this": "off",
     "react/jsx-no-bind": ["error", {
       "allowArrowFunctions": true,

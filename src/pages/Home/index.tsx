@@ -50,7 +50,7 @@ export function Home() {
       setContacts(contactsList);
 
       setHasError(false);
-    } catch (err) {
+    } catch {
       setHasError(true);
     } finally {
       setIsLoading(false);
