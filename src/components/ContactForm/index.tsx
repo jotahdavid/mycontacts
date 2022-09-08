@@ -53,6 +53,18 @@ export function ContactForm({ buttonLabel }: ContactFormProps) {
     removeError('email');
   }
 
+  function handlePhoneChange({ target }: ChangeEvent<HTMLInputElement>) {
+    const onlyNumbers = target.value.replace(/\D/g, '');
+    setPhone(onlyNumbers.slice(0, 11));
+
+    if (onlyNumbers.length > 0 && onlyNumbers.length < 10) {
+      setError({ field: 'phone', message: 'Número inválido!' });
+      return;
+    }
+
+    removeError('phone');
+  }
+
   return (
     <Form onSubmit={handleSubmit} noValidate>
       <FormGroup error={getErrorMessageByFieldName('name')}>
@@ -75,12 +87,13 @@ export function ContactForm({ buttonLabel }: ContactFormProps) {
         />
       </FormGroup>
 
-      <FormGroup>
+      <FormGroup error={getErrorMessageByFieldName('phone')}>
         <Input
           type="tel"
           placeholder="Telefone"
+          error={Boolean(getErrorMessageByFieldName('phone'))}
           value={formatPhoneNumber(phone)}
-          onChange={({ target }) => setPhone(target.value.replace(/\D/g, '').slice(0, 11))}
+          onChange={handlePhoneChange}
           maxLength={15}
         />
       </FormGroup>
