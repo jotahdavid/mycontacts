@@ -182,7 +182,7 @@ export const ErrorContainer = styled.div`
   }
 `;
 
-export const EmptyListContainer = styled.div`
+export const NoContactMessage = styled.div`
   margin-top: ${rem(16)};
   display: flex;
   flex-direction: column;
@@ -202,5 +202,28 @@ export const EmptyListContainer = styled.div`
     line-height: inherit;
     font-size: inherit;
     color: ${({ theme }) => theme.colors.primary.main}
+  }
+`;
+
+export const NoContactFoundMessage = styled.div`
+  margin-top: ${rem(16)};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: ${rem(24)};
+
+  img {
+    align-self: flex-start;
+  }
+
+  p {
+    font-size: ${rem(16)};
+    color: ${({ theme }) => theme.colors.gray[200]};
+  }
+
+  strong {
+    font-size: inherit;
+    color: inherit;
+    word-break: break-word;
   }
 `;

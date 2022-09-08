@@ -16,7 +16,8 @@ import {
   Header,
   InputSearchContainer,
   ListContainer,
-  EmptyListContainer,
+  NoContactMessage,
+  NoContactFoundMessage,
 } from './styles';
 
 import arrowIcon from '@assets/images/icons/arrow.svg';
@@ -24,6 +25,7 @@ import editIcon from '@assets/images/icons/edit.svg';
 import trashIcon from '@assets/images/icons/trash.svg';
 import sadFaceImage from '@assets/images/sad.svg';
 import emptyBoxImage from '@assets/images/empty-box.svg';
+import magnifierImage from '@assets/images/magnifier-question.svg';
 
 type Contact = ContactResponse;
 
@@ -118,7 +120,7 @@ export function Home() {
       {!hasError && (
         <>
           {(contacts.length < 1 && !isLoading) && (
-            <EmptyListContainer>
+            <NoContactMessage>
               <img src={emptyBoxImage} alt="Caixa azul" />
               <p>
                 Você ainda não tem nenhum contato cadastrado!
@@ -129,7 +131,23 @@ export function Home() {
                 &nbsp;
                 à cima para cadastrar o seu primeiro!
               </p>
-            </EmptyListContainer>
+            </NoContactMessage>
+          )}
+
+          {(contacts.length > 0 && filteredContacts.length < 1) && (
+            <NoContactFoundMessage>
+              <img src={magnifierImage} alt="Ícone de uma lupa vermelha" />
+              <p>
+                Nenhum resultado foi encontrado para
+                &nbsp;
+                <strong>
+                  &ldquo;
+                  {searchTerm}
+                  &rdquo;
+                </strong>
+                .
+              </p>
+            </NoContactFoundMessage>
           )}
 
           <ListContainer orderBy={orderBy}>
