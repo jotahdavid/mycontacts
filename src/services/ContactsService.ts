@@ -59,11 +59,15 @@ class ContactsService {
       category_id: contact.categoryId || null,
     };
 
-    const response = await this.http.post('/contacts', {
+    const response = await this.http.post('/contactss', {
       body: newContact,
     });
 
-    return response;
+    if (!response.status.ok) {
+      throw new APIError(response);
+    }
+
+    return response.data;
   }
 }
 

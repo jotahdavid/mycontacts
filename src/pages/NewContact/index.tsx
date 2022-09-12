@@ -1,3 +1,5 @@
+import toast from '@utils/toast';
+
 import ContactsService from '@services/ContactsService';
 import type { Contact } from '@services/ContactsService';
 
@@ -8,8 +10,10 @@ export function NewContact() {
   async function handleSubmit(contact: Contact) {
     try {
       await ContactsService.createContact(contact);
+
+      toast.sucess('Contato cadastrado com sucesso!');
     } catch {
-      alert('Ocorreu um erro ao cadastrar o contato!');
+      toast.danger('Ocorreu um erro ao cadastrar o contato!');
     }
   }
 
