@@ -1,5 +1,7 @@
 import { ReactNode } from 'react';
-import { Container, ErrorMessage, Spinner } from './styles';
+
+import { Spinner } from '@components/Spinner';
+import { Container, ErrorMessage, SpinnerContainer } from './styles';
 
 interface FormGroupProps {
   children: ReactNode;
@@ -10,7 +12,11 @@ interface FormGroupProps {
 export function FormGroup({ children, error, loading }: FormGroupProps) {
   return (
     <Container>
-      {loading && <Spinner />}
+      {loading && (
+        <SpinnerContainer>
+          <Spinner size={20} />
+        </SpinnerContainer>
+      )}
       {children}
 
       {error && <ErrorMessage>{error}</ErrorMessage>}

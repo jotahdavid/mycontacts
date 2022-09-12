@@ -1,4 +1,4 @@
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { rem } from '@assets/styles/utils';
 
 export const Container = styled.div`
@@ -13,30 +13,8 @@ export const ErrorMessage = styled.small`
   font-size: ${rem(12)};
 `;
 
-const rotatingAnimation = keyframes`
-  0% {
-    transform: rotate(0);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-`;
-
-export const Spinner = styled.div`
-  width: ${rem(20)};
-  height: ${rem(20)};
-  border-radius: 50%;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
+export const SpinnerContainer = styled.div`
   position: absolute;
   right: 1rem;
   top: calc(50% - ${rem(20)} / 2);
-
-  border: 4px solid ${({ theme }) => theme.colors.primary.main};
-  border-top-color: transparent;
-  border-left-color: transparent;
-
-  animation: ${rotatingAnimation} 800ms infinite linear;
 `;

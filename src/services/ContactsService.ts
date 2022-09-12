@@ -1,5 +1,4 @@
 import HttpClient, { HttpClientResponse } from '@services/utils/HttpClient';
-import delay from '@utils/delay';
 import APIError from '@errors/APIError';
 
 export interface Contact {
@@ -39,7 +38,6 @@ class ContactsService {
   async listContacts(orderBy: OrderBy = 'ASC'): Promise<ContactResponse[]> {
     const response = await this.http.get<ContactResponse[]>(`/contacts?orderBy=${orderBy}`);
 
-    await delay(500);
     responseHasError(response);
 
     if (isValidContact(response.data)) {

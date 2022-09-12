@@ -1,3 +1,5 @@
+import delay from '@utils/delay';
+
 export interface HttpClientResponse<T = any> {
   status: {
     ok: boolean;
@@ -43,6 +45,8 @@ class HttpClient {
     const responseData = responseHeaders['content-type'].includes('json')
       ? await response.json() as DataType
       : null;
+
+    await delay(500);
 
     return {
       status: {

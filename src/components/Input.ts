@@ -31,6 +31,12 @@ export const Input = styled.input<StyledInputProps>`
     border-color: ${({ theme }) => theme.colors.primary.main};
   }
 
+  &:disabled {
+    background-color: ${({ theme }) => theme.colors.gray[100]};
+    border-color:  ${({ theme }) => theme.colors.gray[100]};
+    opacity: 1;
+  }
+
   ${({ theme, error }) =>
     error &&
     css`

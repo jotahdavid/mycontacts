@@ -5,7 +5,11 @@ interface StyledButtonProps {
   danger?: boolean;
 }
 
-export const Button = styled.button<StyledButtonProps>`
+export const StyledButton = styled.button<StyledButtonProps>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   height: ${rem(56)};
   background-color: ${({ theme }) => theme.colors.primary.main};
   padding: 0 ${rem(16)};
@@ -50,6 +54,6 @@ export const Button = styled.button<StyledButtonProps>`
     `}
 `;
 
-Button.defaultProps = {
+StyledButton.defaultProps = {
   danger: false,
 };

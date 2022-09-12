@@ -19,11 +19,13 @@ import { ButtonContainer, Form } from './styles';
 
 interface ContactFormProps {
   buttonLabel: string;
-  onSubmit: (contact: Contact) => void;
+  onSubmit: (contact: Contact) => Promise<void>;
 }
 
 export function ContactForm({ buttonLabel, onSubmit }: ContactFormProps) {
   const [isLoadingCategories, setIsLoadingCategories] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [categories, setCategories] = useState<CategoryResponse[]>([]);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -49,14 +51,17 @@ export function ContactForm({ buttonLabel, onSubmit }: ContactFormProps) {
     })();
   }, []);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    onSubmit({
+
+    setIsSubmitting(true);
+    await onSubmit({
       name: name.trim(),
       email,
       phone,
       categoryId,
     });
+    setIsSubmitting(false);
   }
 
   function handleNameChange({ target }: ChangeEvent<HTMLInputElement>) {
@@ -102,6 +107,7 @@ export function ContactForm({ buttonLabel, onSubmit }: ContactFormProps) {
           error={Boolean(getErrorMessageByFieldName('name'))}
           value={name}
           onChange={handleNameChange}
+          disabled={isSubmitting}
         />
       </FormGroup>
 
@@ -112,6 +118,7 @@ export function ContactForm({ buttonLabel, onSubmit }: ContactFormProps) {
           error={Boolean(getErrorMessageByFieldName('email'))}
           value={email}
           onChange={handleEmailChange}
+          disabled={isSubmitting}
         />
       </FormGroup>
 
@@ -123,6 +130,7 @@ export function ContactForm({ buttonLabel, onSubmit }: ContactFormProps) {
           value={formatPhoneNumber(phone)}
           onChange={handlePhoneChange}
           maxLength={15}
+          disabled={isSubmitting}
         />
       </FormGroup>
 
@@ -130,7 +138,7 @@ export function ContactForm({ buttonLabel, onSubmit }: ContactFormProps) {
         <Select
           value={categoryId}
           onChange={({ target }) => setCategoryId(target.value)}
-          disabled={isLoadingCategories}
+          disabled={isLoadingCategories || isSubmitting}
         >
           <option value="">Sem categoria</option>
           {categories.map((category) => (
@@ -148,6 +156,7 @@ export function ContactForm({ buttonLabel, onSubmit }: ContactFormProps) {
         <Button
           type="submit"
           disabled={!isFormValid}
+          loading={isSubmitting}
         >
           {buttonLabel}
         </Button>

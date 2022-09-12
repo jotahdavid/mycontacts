@@ -1,5 +1,4 @@
 import HttpClient, { HttpClientResponse } from '@services/utils/HttpClient';
-import delay from '@utils/delay';
 import APIError from '@errors/APIError';
 
 export interface CategoryResponse {
@@ -25,7 +24,6 @@ class CategoriesService {
 
   async listCategories(): Promise<CategoryResponse[]> {
     const response = await this.http.get<CategoryResponse[]>('/categories');
-    await delay(500);
 
     responseHasError(response);
 

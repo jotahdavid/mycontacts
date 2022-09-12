@@ -7,8 +7,7 @@ import { ContactForm } from '@components/ContactForm';
 export function NewContact() {
   async function handleSubmit(contact: Contact) {
     try {
-      const response = await ContactsService.createContact(contact);
-      console.log(response);
+      await ContactsService.createContact(contact);
     } catch {
       alert('Ocorreu um erro ao cadastrar o contato!');
     }
