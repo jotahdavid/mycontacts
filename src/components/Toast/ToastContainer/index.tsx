@@ -8,7 +8,7 @@ import type { ToastMessageType } from '@components/Toast/ToastMessage';
 import { Container } from './styles';
 
 interface Message {
-  id: string | number;
+  id: number;
   type: ToastMessageType;
   text: string;
 }
@@ -28,13 +28,19 @@ export function ToastContainer() {
     return () => ToastEventManager.removeListener('addtoast', handleAddToast);
   }, []);
 
+  function handleRemoveMessage(id: number) {
+    setMessages((prevState) => prevState.filter(
+      (message) => message.id !== id,
+    ));
+  }
+
   return (
     <Container>
       {messages.map((message) => (
         <ToastMessage
           key={message.id}
-          text={message.text}
-          type={message.type}
+          message={message}
+          onRemove={handleRemoveMessage}
         />
       ))}
     </Container>
