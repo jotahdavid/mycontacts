@@ -1,8 +1,15 @@
+import EventManager from '@lib/EventManager';
 import { ToastMessageType } from '@components/Toast/ToastMessage';
 
-function addToast(detail: { type: ToastMessageType; text: string; }) {
-  const event = new CustomEvent('addtoast', { detail });
-  document.dispatchEvent(event);
+export type ToastPayload = {
+  type: ToastMessageType;
+  text: string;
+};
+
+export const ToastEventManager = new EventManager<ToastPayload>();
+
+function addToast(toast: ToastPayload) {
+  ToastEventManager.emit('addtoast', toast);
 }
 
 function createHandler(type: ToastMessageType) {
