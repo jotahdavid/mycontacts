@@ -1,5 +1,6 @@
-import { Container } from './styles';
+import { useEffect } from 'react';
 
+import { Container } from './styles';
 import errorCircleIcon from '@assets/images/icons/x-circle.svg';
 import checkCircleIcon from '@assets/images/icons/check-circle.svg';
 
@@ -10,11 +11,20 @@ interface ToastMessageProps {
     id: number;
     text: string;
     type?: ToastMessageType;
+    duration?: number;
   };
   onRemove: (id: number) => void;
 }
 
 export function ToastMessage({ message, onRemove }: ToastMessageProps) {
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      onRemove(message.id);
+    }, message.duration ?? 4000);
+
+    return () => clearTimeout(timeoutId);
+  }, [message, onRemove]);
+
   function handleRemoveToast() {
     onRemove(message.id);
   }

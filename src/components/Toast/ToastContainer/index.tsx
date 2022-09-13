@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { ToastEventManager } from '@utils/toast';
 import type { ToastPayload } from '@utils/toast';
@@ -11,16 +11,19 @@ interface Message {
   id: number;
   type: ToastMessageType;
   text: string;
+  duration?: number;
 }
 
 export function ToastContainer() {
   const [messages, setMessages] = useState<Message[]>([]);
 
   useEffect(() => {
-    function handleAddToast({ type, text }: ToastPayload) {
+    function handleAddToast({ type, text, duration }: ToastPayload) {
       setMessages((prevState) => [
         ...prevState,
-        { id: Math.random(), type, text },
+        {
+          id: Math.random(), type, text, duration,
+        },
       ]);
     }
 
@@ -28,11 +31,11 @@ export function ToastContainer() {
     return () => ToastEventManager.removeListener('addtoast', handleAddToast);
   }, []);
 
-  function handleRemoveMessage(id: number) {
+  const handleRemoveMessage = useCallback((id: number) => {
     setMessages((prevState) => prevState.filter(
       (message) => message.id !== id,
     ));
-  }
+  }, []);
 
   return (
     <Container>
