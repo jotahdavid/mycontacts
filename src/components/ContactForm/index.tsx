@@ -55,13 +55,19 @@ export function ContactForm({ buttonLabel, onSubmit }: ContactFormProps) {
     event.preventDefault();
 
     setIsSubmitting(true);
+
     await onSubmit({
       name: name.trim(),
       email,
       phone,
       categoryId,
     });
+
     setIsSubmitting(false);
+    setName('');
+    setEmail('');
+    setPhone('');
+    setCategoryId('');
   }
 
   function handleNameChange({ target }: ChangeEvent<HTMLInputElement>) {
