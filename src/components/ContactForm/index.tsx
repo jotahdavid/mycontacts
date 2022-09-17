@@ -80,10 +80,6 @@ export const ContactForm = forwardRef<ContactFormRef, ContactFormProps>((
     });
 
     setIsSubmitting(false);
-    setName('');
-    setEmail('');
-    setPhone('');
-    setCategoryId('');
   }
 
   function handleNameChange({ target }: ChangeEvent<HTMLInputElement>) {

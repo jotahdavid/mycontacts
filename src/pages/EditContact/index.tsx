@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import ContactsService from '@services/ContactsService';
+import type { Contact } from '@services/ContactsService';
 import toast from '@utils/toast';
 
 import { ContactForm } from '@components/ContactForm';
@@ -40,6 +41,17 @@ export function EditContact() {
     })();
   }, [contactId, navigate]);
 
+  async function handleSubmit(contact: Contact) {
+    try {
+      const updatedContact = await ContactsService.updateContact(contactId!, contact);
+
+      toast.sucess('Contato editado com sucesso!');
+      setContactName(updatedContact.name);
+    } catch {
+      toast.danger('Ocorreu um erro ao editar o contato!');
+    }
+  }
+
   return (
     <section>
       <Loader loading={isLoading} />
@@ -51,7 +63,7 @@ export function EditContact() {
       <ContactForm
         ref={contactFormRef}
         buttonLabel="Salvar alterações"
-        onSubmit={async () => {}}
+        onSubmit={handleSubmit}
       />
     </section>
   );

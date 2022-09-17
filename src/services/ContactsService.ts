@@ -79,7 +79,7 @@ class ContactsService {
       category_id: contact.categoryId || null,
     };
 
-    const response = await this.http.post('/contacts', {
+    const response = await this.http.post<ContactResponse>('/contacts', {
       body: newContact,
     });
 
@@ -88,6 +88,29 @@ class ContactsService {
     }
 
     return response.data;
+  }
+
+  async updateContact(id: string, contact: Contact) {
+    const updatedContact = {
+      name: contact.name,
+      email: contact.email || null,
+      phone: contact.phone || null,
+      category_id: contact.categoryId || null,
+    };
+
+    const response = await this.http.put<ContactResponse>(`/contacts/${id}`, { body: updatedContact });
+
+    responseHasError(response);
+
+    if (isValidContact(response.data)) {
+      return response.data;
+    }
+
+    if (!response.status.ok) {
+      throw new APIError(response);
+    }
+
+    throw new TypeError('Response data is not Contact type');
   }
 }
 

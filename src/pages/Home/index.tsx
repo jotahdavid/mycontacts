@@ -5,7 +5,8 @@ import { Link } from 'react-router-dom';
 
 import ContactsService from '@services/ContactsService';
 import type { ContactResponse, OrderBy } from '@services/ContactsService';
-// import APIError from '@errors/APIError';
+
+import formatPhoneNumber from '@utils/formatPhoneNumber';
 
 import { Modal } from '@components/Modal';
 import { Loader } from '@components/Loader';
@@ -175,7 +176,7 @@ export function Home() {
                     </div>
 
                     <span>{contact.email}</span>
-                    <span>{contact.phone}</span>
+                    <span>{formatPhoneNumber(contact.phone ?? '')}</span>
                   </div>
 
                   <div className="actions">

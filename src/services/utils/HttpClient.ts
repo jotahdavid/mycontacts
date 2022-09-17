@@ -66,9 +66,17 @@ class HttpClient {
     });
   }
 
-  post(path: string, options: RequestOptions) {
-    return this.makeRequest(path, {
+  post<DataType>(path: string, options: RequestOptions) {
+    return this.makeRequest<DataType>(path, {
       method: 'POST',
+      body: options?.body,
+      headers: options?.headers,
+    });
+  }
+
+  put<DataType>(path: string, options: RequestOptions) {
+    return this.makeRequest<DataType>(path, {
+      method: 'PUT',
       body: options?.body,
       headers: options?.headers,
     });
