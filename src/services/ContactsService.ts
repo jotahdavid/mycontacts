@@ -25,10 +25,14 @@ function responseHasError(response: HttpClientResponse): asserts response {
   }
 }
 
-function isValidContact(value: any): value is ContactResponse[] {
+function isValidContact(value: any): value is ContactResponse {
+  return 'id' in value && 'name' in value;
+}
+
+function isValidContactList(value: any): value is ContactResponse[] {
   if (!Array.isArray(value)) return false;
   return value.length > 0
-    ? 'id' in value[0] && 'name' in value[0]
+    ? isValidContact(value[0])
     : true;
 }
 
@@ -37,6 +41,22 @@ class ContactsService {
 
   async listContacts(orderBy: OrderBy = 'ASC'): Promise<ContactResponse[]> {
     const response = await this.http.get<ContactResponse[]>(`/contacts?orderBy=${orderBy}`);
+
+    responseHasError(response);
+
+    if (isValidContactList(response.data)) {
+      return response.data;
+    }
+
+    if (!response.status.ok) {
+      throw new APIError(response);
+    }
+
+    throw new TypeError('Response data is not Contact type');
+  }
+
+  async getContactById(id: string) {
+    const response = await this.http.get<ContactResponse>(`/contacts/${id}`);
 
     responseHasError(response);
 
