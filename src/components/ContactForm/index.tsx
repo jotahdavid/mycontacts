@@ -1,5 +1,5 @@
 import {
-  ChangeEvent, FormEvent, useEffect, useState,
+  ChangeEvent, FormEvent, forwardRef, useEffect, useImperativeHandle, useState,
 } from 'react';
 
 import CategoriesService from '@services/CategoriesService';
@@ -22,7 +22,14 @@ interface ContactFormProps {
   onSubmit: (contact: Contact) => Promise<void>;
 }
 
-export function ContactForm({ buttonLabel, onSubmit }: ContactFormProps) {
+export interface ContactFormRef {
+  setFieldsValues: (contact: Contact) => void;
+}
+
+export const ContactForm = forwardRef<ContactFormRef, ContactFormProps>((
+  { buttonLabel, onSubmit },
+  ref,
+) => {
   const [isLoadingCategories, setIsLoadingCategories] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -37,6 +44,15 @@ export function ContactForm({ buttonLabel, onSubmit }: ContactFormProps) {
   } = useErrors();
 
   const isFormValid = (name && errors.length === 0);
+
+  useImperativeHandle(ref, () => ({
+    setFieldsValues: (contact: Contact) => {
+      setName(contact.name);
+      setEmail(contact.email);
+      setPhone(contact.phone);
+      setCategoryId(contact.categoryId);
+    },
+  }), []);
 
   useEffect(() => {
     (async () => {
@@ -169,4 +185,4 @@ export function ContactForm({ buttonLabel, onSubmit }: ContactFormProps) {
       </ButtonContainer>
     </Form>
   );
-}
+});
