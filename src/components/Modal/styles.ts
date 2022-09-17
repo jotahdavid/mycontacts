@@ -35,13 +35,12 @@ export const Container = styled.div<StyledContainerProps>`
     .title {
       font-weight: bold;
       font-size: ${rem(22)};
-      margin-bottom: ${rem(8)};
+      margin-bottom: ${rem(16)};
 
       color: ${danger ? theme.colors.danger.main : theme.colors.gray[900]};
     }
 
-    .description {
-      font-size: ${rem(16)};
+    .modal-body {
       color: ${theme.colors.gray[900]};
       margin-bottom: ${rem(32)};
     }
@@ -60,7 +59,6 @@ export const Footer = styled.footer`
   width: 100%;
 
   button {
-    max-width: ${rem(100)};
     width: 90%;
   }
 
@@ -74,5 +72,9 @@ export const Footer = styled.footer`
     color: ${({ theme }) => theme.colors.gray[200]};
 
     height: ${rem(56)};
+
+    &:disabled {
+      cursor: not-allowed;
+    }
   }
 `;

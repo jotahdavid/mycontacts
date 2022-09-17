@@ -112,6 +112,18 @@ class ContactsService {
 
     throw new TypeError('Response data is not Contact type');
   }
+
+  async deleteContact(id: string) {
+    const response = await this.http.delete(`/contacts/${id}`);
+
+    responseHasError(response);
+
+    if (!response.status.ok) {
+      throw new APIError(response);
+    }
+
+    return response.data;
+  }
 }
 
 export default new ContactsService();

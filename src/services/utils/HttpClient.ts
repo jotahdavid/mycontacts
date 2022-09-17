@@ -42,7 +42,7 @@ class HttpClient {
     });
 
     const responseHeaders = Object.fromEntries(response.headers.entries());
-    const responseData = responseHeaders['content-type'].includes('json')
+    const responseData = responseHeaders['content-type']?.includes('json')
       ? await response.json() as DataType
       : null;
 
@@ -78,6 +78,13 @@ class HttpClient {
     return this.makeRequest<DataType>(path, {
       method: 'PUT',
       body: options?.body,
+      headers: options?.headers,
+    });
+  }
+
+  delete<DataType = any>(path: string, options?: Omit<RequestOptions, 'body'>) {
+    return this.makeRequest<DataType>(path, {
+      method: 'DELETE',
       headers: options?.headers,
     });
   }

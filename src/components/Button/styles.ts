@@ -35,7 +35,7 @@ export const StyledButton = styled.button<StyledButtonProps>`
   }
 
   &:disabled {
-    background-color: #ccc;
+    background-color: #ccc !important;
     cursor: default;
   }
 
