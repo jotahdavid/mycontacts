@@ -15,8 +15,8 @@ type StyledSpinnerProps = {
 };
 
 export const Spinner = styled.div<StyledSpinnerProps>`
-  width: ${({ size }) => rem(size)};
-  height: ${({ size }) => rem(size)};
+  width: ${({ size }) => rem(size!)};
+  height: ${({ size }) => rem(size!)};
   border-radius: 50%;
 
   display: flex;
