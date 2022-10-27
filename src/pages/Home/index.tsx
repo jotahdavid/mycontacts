@@ -4,7 +4,7 @@ import {
 import { Link } from 'react-router-dom';
 
 import ContactsService from '@services/ContactsService';
-import type { ContactResponse, OrderBy } from '@services/ContactsService';
+import type { ContactResponseMapped, OrderBy } from '@services/ContactsService';
 
 import formatPhoneNumber from '@utils/formatPhoneNumber';
 
@@ -29,7 +29,7 @@ import emptyBoxImage from '@assets/images/empty-box.svg';
 import magnifierImage from '@assets/images/magnifier-question.svg';
 import toast from '@utils/toast';
 
-type Contact = ContactResponse;
+type Contact = ContactResponseMapped;
 
 export function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -214,8 +214,8 @@ export function Home() {
                   <div className="info">
                     <div className="contact-name">
                       <strong>{contact.name}</strong>
-                      {contact.category_name && (
-                        <small>{contact.category_name}</small>
+                      {contact.category.name && (
+                        <small>{contact.category.name}</small>
                       )}
                     </div>
 

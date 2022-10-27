@@ -29,7 +29,7 @@ export function EditContact() {
           name: contact.name,
           email: contact.email ?? '',
           phone: contact.phone ?? '',
-          categoryId: contact.category_id ?? '',
+          categoryId: contact.category.id ?? '',
         });
 
         setContactName(contact.name);

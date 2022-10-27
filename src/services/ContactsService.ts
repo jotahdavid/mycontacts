@@ -1,5 +1,6 @@
 import HttpClient, { HttpClientResponse } from '@services/utils/HttpClient';
 import APIError from '@errors/APIError';
+import ContactMapper from './mappers/ContactMapper';
 
 export interface Contact {
   name: string;
@@ -16,6 +17,8 @@ export interface ContactResponse {
   category_id?: string;
   category_name?: string;
 }
+
+export type ContactResponseMapped = ReturnType<typeof ContactMapper.toDomain>;
 
 export type OrderBy = 'ASC' | 'DESC';
 
@@ -39,13 +42,13 @@ function isValidContactList(value: any): value is ContactResponse[] {
 class ContactsService {
   private http = new HttpClient(import.meta.env.VITE_API_URL);
 
-  async listContacts(orderBy: OrderBy = 'ASC'): Promise<ContactResponse[]> {
+  async listContacts(orderBy: OrderBy = 'ASC'): Promise<ContactResponseMapped[]> {
     const response = await this.http.get<ContactResponse[]>(`/contacts?orderBy=${orderBy}`);
 
     responseHasError(response);
 
     if (isValidContactList(response.data)) {
-      return response.data;
+      return response.data.map(ContactMapper.toDomain);
     }
 
     if (!response.status.ok) {
@@ -55,13 +58,13 @@ class ContactsService {
     throw new TypeError('Response data is not Contact type');
   }
 
-  async getContactById(id: string) {
+  async getContactById(id: string): Promise<ContactResponseMapped> {
     const response = await this.http.get<ContactResponse>(`/contacts/${id}`);
 
     responseHasError(response);
 
     if (isValidContact(response.data)) {
-      return response.data;
+      return ContactMapper.toDomain(response.data);
     }
 
     if (!response.status.ok) {
@@ -72,12 +75,7 @@ class ContactsService {
   }
 
   async createContact(contact: Contact) {
-    const newContact = {
-      name: contact.name,
-      email: contact.email || null,
-      phone: contact.phone || null,
-      category_id: contact.categoryId || null,
-    };
+    const newContact = ContactMapper.toPersistence(contact);
 
     const response = await this.http.post<ContactResponse>('/contacts', {
       body: newContact,
@@ -91,12 +89,7 @@ class ContactsService {
   }
 
   async updateContact(id: string, contact: Contact) {
-    const updatedContact = {
-      name: contact.name,
-      email: contact.email || null,
-      phone: contact.phone || null,
-      category_id: contact.categoryId || null,
-    };
+    const updatedContact = ContactMapper.toPersistence(contact);
 
     const response = await this.http.put<ContactResponse>(`/contacts/${id}`, { body: updatedContact });
 
