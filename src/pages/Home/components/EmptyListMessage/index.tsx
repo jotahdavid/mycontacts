@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 import { Container } from './styles';
 import emptyBoxImage from '@assets/images/empty-box.svg';
 
@@ -9,9 +10,7 @@ export function EmptyListMessage() {
         Você ainda não tem nenhum contato cadastrado!
         <br />
         Clique no botão
-        &nbsp;
-        <strong>&ldquo;Novo contato&rdquo;</strong>
-        &nbsp;
+        <strong> &ldquo;Novo contato&rdquo; </strong>
         à cima para cadastrar o seu primeiro!
       </p>
     </Container>
