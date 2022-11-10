@@ -1,5 +1,6 @@
 import HttpClient, { HttpClientResponse } from '@services/utils/HttpClient';
 import APIError from '@errors/APIError';
+
 import CategoryMapper from './mappers/CategoryMapper';
 
 export interface CategoryResponse {
