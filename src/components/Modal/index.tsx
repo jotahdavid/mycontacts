@@ -1,4 +1,6 @@
-import { ReactNode } from 'react';
+import {
+  ReactNode, useEffect, useRef, useState,
+} from 'react';
 import ReactDOM from 'react-dom';
 
 import { Button } from '@components/Button';
@@ -19,13 +21,37 @@ interface ModalProps {
 export function Modal({
   children, danger, visible, title, cancelLabel, confirmLabel, loading, onCancel, onConfirm,
 }: ModalProps) {
-  if (!visible) {
+  const [shouldRender, setShouldRender] = useState(visible);
+
+  const overlayRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (visible) {
+      setShouldRender(true);
+    }
+
+    function handleAnimationEnd() {
+      setShouldRender(false);
+    }
+
+    const overlayElement = overlayRef.current;
+
+    if (!visible && overlayElement) {
+      overlayElement.addEventListener('animationend', handleAnimationEnd);
+    }
+
+    return () => {
+      overlayElement?.removeEventListener('animationend', handleAnimationEnd);
+    };
+  }, [visible]);
+
+  if (!shouldRender) {
     return null;
   }
 
   return ReactDOM.createPortal(
-    <Overlay>
-      <Container danger={danger}>
+    <Overlay ref={overlayRef} isLeaving={!visible}>
+      <Container danger={danger} isLeaving={!visible}>
         <h1 className="title">{title}</h1>
 
         <div className="modal-body">
