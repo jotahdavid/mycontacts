@@ -1,10 +1,9 @@
-import {
-  ReactNode, useEffect, useRef, useState,
-} from 'react';
+import { ReactNode } from 'react';
 import ReactDOM from 'react-dom';
 
 import { Button } from '@components/Button';
 import { Container, Footer, Overlay } from './styles';
+import useAnimatedUnmount from '@hooks/useAnimatedUnmount';
 
 interface ModalProps {
   children: ReactNode;
@@ -21,36 +20,14 @@ interface ModalProps {
 export function Modal({
   children, danger, visible, title, cancelLabel, confirmLabel, loading, onCancel, onConfirm,
 }: ModalProps) {
-  const [shouldRender, setShouldRender] = useState(visible);
-
-  const overlayRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (visible) {
-      setShouldRender(true);
-    }
-
-    function handleAnimationEnd() {
-      setShouldRender(false);
-    }
-
-    const overlayElement = overlayRef.current;
-
-    if (!visible && overlayElement) {
-      overlayElement.addEventListener('animationend', handleAnimationEnd);
-    }
-
-    return () => {
-      overlayElement?.removeEventListener('animationend', handleAnimationEnd);
-    };
-  }, [visible]);
+  const { shouldRender, animatedElementRef } = useAnimatedUnmount<HTMLDivElement>(visible);
 
   if (!shouldRender) {
     return null;
   }
 
   return ReactDOM.createPortal(
-    <Overlay ref={overlayRef} isLeaving={!visible}>
+    <Overlay ref={animatedElementRef} isLeaving={!visible}>
       <Container danger={danger} isLeaving={!visible}>
         <h1 className="title">{title}</h1>
 
