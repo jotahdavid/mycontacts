@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 import { rem } from '@assets/styles/utils';
 import type { ToastMessageType } from '@components/Toast/ToastMessage';
 
@@ -14,8 +14,30 @@ const containerVariants = {
   `,
 };
 
+const messageIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+const messageOut = keyframes`
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+`;
+
 type StyledContainerProps = {
   type: ToastMessageType
+  isLeaving: boolean;
 };
 
 export const Container = styled.div<StyledContainerProps>`
@@ -32,9 +54,9 @@ export const Container = styled.div<StyledContainerProps>`
   cursor: pointer;
   box-shadow: 0px 20px 20px -16px rgba(0, 0, 0, 0.25);
 
-  &:focus {
-    background-color: rebeccapurple;
-  }
+  animation: ${messageIn} 300ms;
+
+  ${({ isLeaving }) => isLeaving && css`animation: ${messageOut} 300ms forwards;`}
 
   ${({ type }) => containerVariants[type] || containerVariants.default}
 

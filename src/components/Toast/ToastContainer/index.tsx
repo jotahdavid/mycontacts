@@ -16,6 +16,7 @@ interface Message {
 
 export function ToastContainer() {
   const [messages, setMessages] = useState<Message[]>([]);
+  const [pendingRemovalMessagesIds, setPendingRemovalMessagesIds] = useState<number[]>([]);
 
   useEffect(() => {
     function handleAddToast({ type, text, duration }: ToastPayload) {
@@ -32,9 +33,18 @@ export function ToastContainer() {
   }, []);
 
   const handleRemoveMessage = useCallback((id: number) => {
-    setMessages((prevState) => prevState.filter(
-      (message) => message.id !== id,
-    ));
+    setPendingRemovalMessagesIds(
+      (prevState) => [...prevState, id],
+    );
+  }, []);
+
+  const handleAnimationEnd = useCallback((id: number) => {
+    setMessages(
+      (prevState) => prevState.filter((message) => message.id !== id),
+    );
+    setPendingRemovalMessagesIds(
+      (prevState) => prevState.filter((messageId) => messageId !== id),
+    );
   }, []);
 
   return (
@@ -44,6 +54,8 @@ export function ToastContainer() {
           key={message.id}
           message={message}
           onRemove={handleRemoveMessage}
+          isLeaving={pendingRemovalMessagesIds.includes(message.id)}
+          onAnimationEnd={handleAnimationEnd}
         />
       ))}
     </Container>

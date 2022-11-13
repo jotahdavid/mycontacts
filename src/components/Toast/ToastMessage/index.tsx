@@ -1,6 +1,7 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { Container } from './styles';
+
 import errorCircleIcon from '@assets/images/icons/x-circle.svg';
 import checkCircleIcon from '@assets/images/icons/check-circle.svg';
 
@@ -13,10 +14,32 @@ interface ToastMessageProps {
     type?: ToastMessageType;
     duration?: number;
   };
+  isLeaving: boolean;
   onRemove: (id: number) => void;
+  onAnimationEnd: (id: number) => void;
 }
 
-export function ToastMessage({ message, onRemove }: ToastMessageProps) {
+export function ToastMessage({
+  message, onRemove, isLeaving, onAnimationEnd,
+}: ToastMessageProps) {
+  const animatedElementRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleAnimationEnd() {
+      onAnimationEnd(message.id);
+    }
+
+    const animatedElement = animatedElementRef.current;
+
+    if (isLeaving && animatedElement) {
+      animatedElement.addEventListener('animationend', handleAnimationEnd);
+    }
+
+    return () => {
+      animatedElement?.removeEventListener('animationend', handleAnimationEnd);
+    };
+  }, [isLeaving, message.id, onAnimationEnd]);
+
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       onRemove(message.id);
@@ -35,6 +58,8 @@ export function ToastMessage({ message, onRemove }: ToastMessageProps) {
       onClick={handleRemoveToast}
       tabIndex={0}
       role="button"
+      isLeaving={isLeaving}
+      ref={animatedElementRef}
     >
       {message.type === 'sucess' && (
         <img src={checkCircleIcon} alt="Ícone de um círculo com um X dentro" />
