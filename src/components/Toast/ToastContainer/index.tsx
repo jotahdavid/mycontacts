@@ -17,11 +17,9 @@ interface Message {
 
 export function ToastContainer() {
   const {
-    items: messages,
     setItems: setMessages,
-    pendingRemovalItemsId,
-    handleRemoveMessage,
-    handleAnimationEnd,
+    handleRemoveItem: handleRemoveMessage,
+    renderList: renderMessages,
   } = useAnimatedList<Message>();
 
   useEffect(() => {
@@ -40,13 +38,13 @@ export function ToastContainer() {
 
   return (
     <Container>
-      {messages.map((message) => (
+      {renderMessages((message, { isLeaving, animatedRef }) => (
         <ToastMessage
           key={message.id}
           message={message}
           onRemove={handleRemoveMessage}
-          isLeaving={pendingRemovalItemsId.includes(message.id)}
-          onAnimationEnd={handleAnimationEnd}
+          isLeaving={isLeaving}
+          animatedRef={animatedRef}
         />
       ))}
     </Container>

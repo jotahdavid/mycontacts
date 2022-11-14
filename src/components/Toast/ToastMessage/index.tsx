@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { RefObject, useEffect } from 'react';
 
 import { Container } from './styles';
 
@@ -15,31 +15,13 @@ interface ToastMessageProps {
     duration?: number;
   };
   isLeaving: boolean;
+  animatedRef: RefObject<HTMLDivElement>;
   onRemove: (id: number) => void;
-  onAnimationEnd: (id: number) => void;
 }
 
 export function ToastMessage({
-  message, onRemove, isLeaving, onAnimationEnd,
+  message, onRemove, isLeaving, animatedRef,
 }: ToastMessageProps) {
-  const animatedElementRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    function handleAnimationEnd() {
-      onAnimationEnd(message.id);
-    }
-
-    const animatedElement = animatedElementRef.current;
-
-    if (isLeaving && animatedElement) {
-      animatedElement.addEventListener('animationend', handleAnimationEnd);
-    }
-
-    return () => {
-      animatedElement?.removeEventListener('animationend', handleAnimationEnd);
-    };
-  }, [isLeaving, message.id, onAnimationEnd]);
-
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       onRemove(message.id);
@@ -59,7 +41,7 @@ export function ToastMessage({
       tabIndex={0}
       role="button"
       isLeaving={isLeaving}
-      ref={animatedElementRef}
+      ref={animatedRef}
     >
       {message.type === 'sucess' && (
         <img src={checkCircleIcon} alt="Ícone de um círculo com um X dentro" />
