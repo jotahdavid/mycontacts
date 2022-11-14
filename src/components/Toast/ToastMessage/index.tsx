@@ -1,4 +1,4 @@
-import { RefObject, useEffect } from 'react';
+import { memo, RefObject, useEffect } from 'react';
 
 import { Container } from './styles';
 
@@ -19,9 +19,9 @@ interface ToastMessageProps {
   onRemove: (id: number) => void;
 }
 
-export function ToastMessage({
+export const ToastMessage = memo(({
   message, onRemove, isLeaving, animatedRef,
-}: ToastMessageProps) {
+}: ToastMessageProps) => {
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       onRemove(message.id);
@@ -52,4 +52,4 @@ export function ToastMessage({
       <strong>{message.text}</strong>
     </Container>
   );
-}
+});
