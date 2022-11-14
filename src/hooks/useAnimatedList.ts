@@ -6,12 +6,13 @@ interface ItemWithId {
   id: string | number;
 }
 
-interface RenderListProps {
+interface RenderListProps<ElementType> {
   isLeaving: boolean;
-  animatedRef: RefObject<any>;
+  animatedRef: RefObject<ElementType>;
 }
 
-type RenderListCallback<ItemType> = (item: ItemType, props: RenderListProps) => JSX.Element;
+type RenderListCallback<ItemType, ElementType> =
+  (item: ItemType, props: RenderListProps<ElementType>) => JSX.Element;
 
 export default function useAnimatedList<T extends ItemWithId>(initialList: T[] = []) {
   type ItemId = T['id'];
@@ -19,8 +20,7 @@ export default function useAnimatedList<T extends ItemWithId>(initialList: T[] =
   const [items, setItems] = useState(initialList);
   const [pendingRemovalItemsId, setPendingRemovalItemsId] = useState<ItemId[]>([]);
 
-  // TODO: Be able to pass element type to RefObject
-  const animatedRefs = useRef<Map<ItemId, RefObject<any>>>(new Map());
+  const animatedRefs = useRef<Map<ItemId, RefObject<HTMLElement>>>(new Map());
   const animationEndListeners = useRef<Map<ItemId, Function>>(new Map());
 
   const handleAnimationEnd = useCallback((itemId: ItemId) => {
@@ -50,7 +50,7 @@ export default function useAnimatedList<T extends ItemWithId>(initialList: T[] =
         handleAnimationEnd(itemId);
       };
       const removeListener = () => {
-        animatedRef.current.removeEventListener('animationend', onAnimationEnd);
+        animatedRef.current?.removeEventListener('animationend', onAnimationEnd);
       };
 
       animatedRef.current.addEventListener('animationend', onAnimationEnd);
@@ -83,12 +83,13 @@ export default function useAnimatedList<T extends ItemWithId>(initialList: T[] =
     return animatedRef;
   }, []);
 
-  const renderList = useCallback((renderCallback: RenderListCallback<T>) => (
-    items.map((item) => renderCallback(item, {
-      isLeaving: pendingRemovalItemsId.includes(item.id),
-      animatedRef: getAnimatedRef(item.id),
-    }))
-  ), [items, pendingRemovalItemsId, getAnimatedRef]);
+  const renderList = useCallback(<E>
+    (renderCallback: RenderListCallback<T, E>) => (
+      items.map((item) => renderCallback(item, {
+        isLeaving: pendingRemovalItemsId.includes(item.id),
+        animatedRef: getAnimatedRef(item.id) as RefObject<E>,
+      }))
+    ), [items, pendingRemovalItemsId, getAnimatedRef]);
 
   return {
     setItems,

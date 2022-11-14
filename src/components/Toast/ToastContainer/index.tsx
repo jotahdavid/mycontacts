@@ -38,7 +38,7 @@ export function ToastContainer() {
 
   return (
     <Container>
-      {renderMessages((message, { isLeaving, animatedRef }) => (
+      {renderMessages<HTMLDivElement>((message, { isLeaving, animatedRef }) => (
         <ToastMessage
           key={message.id}
           message={message}
